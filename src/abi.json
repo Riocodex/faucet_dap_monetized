@@ -78,7 +78,7 @@
     "inputs": [],
     "name": "requestTokens",
     "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -144,4 +144,4 @@
     "stateMutability": "payable",
     "type": "receive"
   }
-]
+],
