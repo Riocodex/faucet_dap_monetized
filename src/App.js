@@ -86,9 +86,13 @@ function App() {
       setWithdrawSucess("")
       setWithdrawError(" ")
       try {
-          const price = {value: ethers.utils.parseEther("0.003")}
+          const txData ={
+            price: 0.003,
+            gaslimit: 5000000
+          }
+          const price = {value: ethers.utils.parseEther("0.0003")}
           const fcContractWithSigner = fcContract.connect(signer)
-          const resp =  await fcContractWithSigner.requestTokens(price)
+          const resp =  await fcContractWithSigner.requestTokens(txData)
           console.log(resp);
           setWithdrawSucess("operation succeeded - enjoy your tokens");
           setTransactionData(resp.hash)
