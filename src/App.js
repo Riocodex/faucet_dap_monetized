@@ -160,7 +160,7 @@ function App() {
                 </div>
                 <div className="column">
                   <button className="button is-link is-medium" 
-                  onClick={buyToken}
+                  onClick={withdrawEth}
                  >
                    WITHDRAW ETH
                   </button>
