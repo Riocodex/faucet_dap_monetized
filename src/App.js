@@ -5,6 +5,9 @@ import abi from './abi.json'
 
 
 function App() {
+  const [withdrawError, setWithdrawError] = useState("");
+  const [withdrawSuccess, setWithdrawSucess] = useState("");
+  const [transactionData, setTransactionData ] = useState("");
   const contractAddress ="0xcbDf5891a893575E99ac8F5800002E482B4695A8"
   const contract_abi = abi;
 
@@ -29,6 +32,8 @@ function App() {
   }
 
   const buyToken = async () => {
+    setWithdrawSucess("")
+    setWithdrawError(" ")
     try {
      
       const {ethereum} = window;
@@ -43,9 +48,12 @@ function App() {
         );
 
         const price = {value: ethers.utils.parseEther("0.0003")}
-        const buyTokenTxn = await tokenContract.getTokens(price);
+        const buyTokenTxn = await tokenContract.requestTokens(price);
 
         await buyTokenTxn.wait();
+        console.log(buyTokenTxn)
+        setWithdrawSucess("operation succeeded - enjoy your tokens");
+        setTransactionData(buyTokenTxn.hash)
 
         alert('Purchase succesful')
         
@@ -105,7 +113,7 @@ function App() {
                     className="input is-medium"
                     type="text"
                     placeholder="Enter your wallet address (0x...)"
-                    // defaultValue={walletAddress}
+                    defaultValue={account}
                   />
                 </div>
                 <div className="column">
