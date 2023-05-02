@@ -128,7 +128,7 @@ function App() {
               <article className="panel is-grey-darker">
                 <p className="panel-heading">Transaction Data</p>
                 <div className="panel-block">
-                  {/* <p>{transactionData ? `Transaction hash: ${transactionData}` : "--"}</p> */}
+                  <p>{transactionData ? `Transaction hash: ${transactionData}` : "--"}</p>
                 </div>
               </article>
             </div>
