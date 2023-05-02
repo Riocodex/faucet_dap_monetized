@@ -1,104 +1,64 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { ethers } from "ethers";
-import faucetContract from "./ethereum/faucet";
+import abi from './abi.json'
+
 
 function App() {
-  const [walletAddress, setWalletAddress] = useState("");
-  const [signer, setSigner] = useState()
-  const [fcContract, setFcContract] = useState()
-  const [withdrawError, setWithdrawError] = useState("");
-  const [withdrawSuccess, setWithdrawSucess] = useState("");
-  const [transactionData, setTransactionData ] = useState("");
+  const contractAddress ="0x5FbDB2315678afecb367f032d93F642f64180aa3"
+  const contract_abi = abi;
 
+  const [token, setToken] = useState({})
+  const [ account, setAccount ] = useState(null)
 
-  useEffect(() => {
-    getCurrentWalletConnected();
-    addWalletListener();
-  }, [walletAddress]);
+  
+  //Metamask Login/Connect
+  const web3Handler = async() =>{
+    const accounts = await window.ethereum.request({method: "eth_requestAccounts"})
+    setAccount(accounts[0])
+    //Get provider from Metamask
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    //set signer
+    const signer = provider.getSigner()
+    loadContracts(signer)
+  }
+  const loadContracts = async (signer) => {
+    //get deployed copies of contract
+    const token = new ethers.Contract(contractAddress, contract_abi, signer)
+    setToken(token)
+  }
 
-  const connectWallet = async () => {
-    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
-      try {
-        // get provider
-        const provider = new ethers.providers.Web3Provider(window.ethereum)
-        //get accounts
-        const accounts = await provider.send("eth_requestAccounts",[])
-        /* get signer */ 
-          setSigner(provider.getSigner());
+  const buyToken = async () => {
+    try {
+     
+      const {ethereum} = window;
 
-          /** local contract instance */
-          setFcContract(faucetContract(provider))
-        /* MetaMask is installed */
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum, "any");
+        const signer = provider.getSigner();
+        const tokenContract = new ethers.Contract(
+          contractAddress,
+          contract_abi,
+          signer
+        );
+
+        const price = {value: ethers.utils.parseEther("0.0003")}
+        const buyTokenTxn = await tokenContract.getTokens(price);
+
+        await buyTokenTxn.wait();
+
+        alert('Purchase succesful')
         
-        setWalletAddress(accounts[0]);
-        console.log(accounts[0]);
-      } catch (err) {
-        console.error(err.message);
+       
       }
-    } else {
-      /* MetaMask is not installed */
-      console.log("Please install MetaMask");
+    } catch (error) {
+      console.log(error);
     }
+    
   };
 
-  const getCurrentWalletConnected = async () => {
-    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
-      try {
-         // get provider
-         const provider = new ethers.providers.Web3Provider(window.ethereum)
-         //get accounts
-         const accounts = await provider.send("eth_accounts",[])
-        if (accounts.length > 0) {
-          /* get signer */ 
-          setSigner(provider.getSigner());
- 
-          /** local contract instance */
-          setFcContract(faucetContract(provider))
-          setWalletAddress(accounts[0]);
-          console.log(accounts[0]);
-        } else {
-          console.log("Connect to MetaMask using the Connect button");
-        }
-      } catch (err) {
-        console.error(err.message);
-      }
-    } else {
-      /* MetaMask is not installed */
-      console.log("Please install MetaMask");
-    }
-  };
 
-  const addWalletListener = async () => {
-    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
-      window.ethereum.on("accountsChanged", (accounts) => {
-        setWalletAddress(accounts[0]);
-        console.log(accounts[0]);
-      });
-    } else {
-      /* MetaMask is not installed */
-      setWalletAddress("");
-      console.log("Please install MetaMask");
-    }
-  };
 
-    const getRIOHandler = async ()=>{
-      setWithdrawSucess("")
-      setWithdrawError(" ")
-      const price = {value: ethers.utils.parseEther("0.0003")}
-      try {
-        const txData = { price : { value: ethers.utils.parseEther("0.003")}, gasLimit: {gasLimit: 5000000}}
-          
-          const fcContractWithSigner = fcContract.connect(signer)
-          const resp =  await fcContractWithSigner.requestTokens(txData)
-          console.log(resp);
-          setWithdrawSucess("operation succeeded - enjoy your tokens");
-          setTransactionData(resp.hash)
-      } catch (error) {
-        console.error(error.message);
-        setWithdrawError(error.message);
-      }
-    }
   return (
     <div>
       <nav className="navbar">
@@ -110,16 +70,16 @@ function App() {
             <div className="navbar-end is-align-items-center">
               <button
                 className="button is-white connect-wallet"
-                onClick={connectWallet}
+                
               >
-                <span className="is-link has-text-weight-bold">
+                {/* <span className="is-link has-text-weight-bold">
                   {walletAddress && walletAddress.length > 0
                     ? `Connected: ${walletAddress.substring(
                         0,
                         6
                       )}...${walletAddress.substring(38)}`
                     : "Connect Wallet"}
-                </span>
+                </span> */}
               </button>
             </div>
           </div>
@@ -130,14 +90,14 @@ function App() {
           <div className="container has-text-centered main-content">
             <h1 className="title is-1">Faucet</h1>
             <p>Fast and reliable. 50 RIO/day.</p>
-            <div className="mt-5">
+            {/* <div className="mt-5">
               {withdrawError && (
                 <div className="withdraw-error">{withdrawError}</div>
               )}
               {withdrawSuccess && (
                 <div className="withdraw-success">{withdrawSuccess}</div>
               )}{" "}
-            </div>
+            </div> */}
             <div className="box address-box">
               <div className="columns">
                 <div className="column is-four-fifths">
@@ -145,13 +105,13 @@ function App() {
                     className="input is-medium"
                     type="text"
                     placeholder="Enter your wallet address (0x...)"
-                    defaultValue={walletAddress}
+                    // defaultValue={walletAddress}
                   />
                 </div>
                 <div className="column">
                   <button className="button is-link is-medium" 
-                  onClick={getRIOHandler }
-                  disabled={walletAddress ? false :true }>
+                  // onClick={getRIOHandler }
+                 >
                     GET TOKENS
                   </button>
                 </div>
@@ -159,7 +119,7 @@ function App() {
               <article className="panel is-grey-darker">
                 <p className="panel-heading">Transaction Data</p>
                 <div className="panel-block">
-                  <p>{transactionData ? `Transaction hash: ${transactionData}` : "--"}</p>
+                  {/* <p>{transactionData ? `Transaction hash: ${transactionData}` : "--"}</p> */}
                 </div>
               </article>
             </div>
