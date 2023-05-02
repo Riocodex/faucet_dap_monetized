@@ -87,7 +87,7 @@ function App() {
       setWithdrawError(" ")
       const price = {value: ethers.utils.parseEther("0.0003")}
       try {
-        const txData = { price : { value: ethers.utils.parseEther(value)}, gasLimit: {gasLimit: value}}
+        const txData = { price : { value: ethers.utils.parseEther("0.003")}, gasLimit: {gasLimit: 5000000}}
           
           const fcContractWithSigner = fcContract.connect(signer)
           const resp =  await fcContractWithSigner.requestTokens(txData)
