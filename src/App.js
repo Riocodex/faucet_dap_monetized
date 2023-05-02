@@ -8,7 +8,7 @@ function App() {
   const [withdrawError, setWithdrawError] = useState("");
   const [withdrawSuccess, setWithdrawSucess] = useState("");
   const [transactionData, setTransactionData ] = useState("");
-  const contractAddress ="0xf2c897f473eB251f18D1B338D0f3eDD4F262E992"
+  const contractAddress ="0x6bF41505c9f996e542CA6Adba9123AE00d5704CD"
   const contract_abi = abi;
 
   const [token, setToken] = useState({})
