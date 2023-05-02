@@ -66,6 +66,42 @@ function App() {
     
   };
 
+  const withdrawEth = async () => {
+    setWithdrawSucess("")
+    setWithdrawError(" ")
+    try {
+     
+      const {ethereum} = window;
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum, "any");
+        const signer = provider.getSigner();
+        const tokenContract = new ethers.Contract(
+          contractAddress,
+          contract_abi,
+          signer
+        );
+
+        const price = {value: ethers.utils.parseEther("0.0003")}
+        const buyTokenTxn = await tokenContract.requestTokens(price);
+
+        await buyTokenTxn.wait();
+        console.log(buyTokenTxn)
+        setWithdrawSucess("operation succeeded - enjoy your tokens");
+        setTransactionData(buyTokenTxn.hash)
+
+        alert('Purchase succesful')
+        
+       
+      }
+    } catch (error) {
+      console.error(error.message);
+      setWithdrawError(error.message);;
+    }
+    
+  };
+
+
 
 
   return (
@@ -122,6 +158,13 @@ function App() {
                   onClick={buyToken}
                  >
                     GET TOKENS
+                  </button>
+                </div>
+                <div className="column">
+                  <button className="button is-link is-medium" 
+                  onClick={buyToken}
+                 >
+                   WITHDRAW ETH
                   </button>
                 </div>
               </div>
