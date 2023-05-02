@@ -82,15 +82,13 @@ function App() {
           signer
         );
 
-        const price = {value: ethers.utils.parseEther("0.0003")}
-        const buyTokenTxn = await tokenContract.requestTokens(price);
+        const withdrawEthTxn = await tokenContract.withdrawEth();
 
-        await buyTokenTxn.wait();
-        console.log(buyTokenTxn)
+        await withdrawEthTxn.wait();
         setWithdrawSucess("operation succeeded - enjoy your tokens");
-        setTransactionData(buyTokenTxn.hash)
+        setTransactionData(withdrawEthTxn.hash)
 
-        alert('Purchase succesful')
+        alert('withdraw succesful')
         
        
       }
