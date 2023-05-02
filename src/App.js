@@ -70,7 +70,7 @@ function App() {
             <div className="navbar-end is-align-items-center">
               <button
                 className="button is-white connect-wallet"
-                
+                onClick={web3Handler} 
               >
                 <span className="is-link has-text-weight-bold">
                   {account 
