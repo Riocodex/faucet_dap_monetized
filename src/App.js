@@ -85,12 +85,13 @@ function App() {
     const getRIOHandler = async ()=>{
       setWithdrawSucess("")
       setWithdrawError(" ")
+      const price = {value: ethers.utils.parseEther("0.0003")}
       try {
           const txData ={
-            price: 0.003,
+            price: price,
             gaslimit: 5000000
           }
-          const price = {value: ethers.utils.parseEther("0.0003")}
+          
           const fcContractWithSigner = fcContract.connect(signer)
           const resp =  await fcContractWithSigner.requestTokens(txData)
           console.log(resp);

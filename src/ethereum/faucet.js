@@ -37,6 +37,25 @@ const faucetAbi =[
       {
         "indexed": true,
         "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "FeePaid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "to",
         "type": "address"
       },
@@ -84,6 +103,19 @@ const faucetAbi =[
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "requiredFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -92,6 +124,19 @@ const faucetAbi =[
       }
     ],
     "name": "setLockTime",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "setRequiredFee",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -150,7 +195,7 @@ const faucetAbi =[
 
 const faucetContract = (provider) =>{
     return new ethers.Contract(
-        "0xc3B167B2c2e7d62e293aA4a91D2ab2Ae989e8f71",
+        "0xcbDf5891a893575E99ac8F5800002E482B4695A8",
         faucetAbi,
         provider
     )
