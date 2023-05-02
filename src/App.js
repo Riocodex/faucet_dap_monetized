@@ -72,14 +72,14 @@ function App() {
                 className="button is-white connect-wallet"
                 
               >
-                {/* <span className="is-link has-text-weight-bold">
-                  {walletAddress && walletAddress.length > 0
-                    ? `Connected: ${walletAddress.substring(
+                <span className="is-link has-text-weight-bold">
+                  {account 
+                    ? `Connected: ${account.substring(
                         0,
                         6
-                      )}...${walletAddress.substring(38)}`
+                      )}...${account.substring(38)}`
                     : "Connect Wallet"}
-                </span> */}
+                </span>
               </button>
             </div>
           </div>
